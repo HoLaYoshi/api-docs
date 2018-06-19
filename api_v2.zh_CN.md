@@ -26,6 +26,10 @@ OCX开发者接口包含两类API
 
 ### 公有接口
 
+获取服务器时间戳
+`GET /api/v2/timestamp`
+
+
 获取所有市场
 `GET /api/v2/markets`
 
