@@ -178,7 +178,9 @@ GET https://openapi.ocx.com/api/v2/tickers
         "market_code" : "ethbtc",
         "open" : "0.0517",
         "volume" : "454.3",
-        "timestamp" : 1529275425
+        "timestamp" : 1529275425,
+        "sell": "0.07914108",
+        "buy": "0.07902933",
     }]
 }
 ```
