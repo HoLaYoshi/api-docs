@@ -41,8 +41,18 @@ OCX开发者接口包含两类API
 
 #### 签名步骤
 
+0. 调用接口`/api/v2/timestamp`获取服务器上的时间戳。
+~~~shell
+curl -X GET 'https://openapi.ocx.com/api/v2/timestamp'
+~~~
+
+~~~ruby
+require 'httparty'
+tonce = HTTParty.get('https://openapi.ocx.com/api/v2/timestamp')
+~~~
+
 1.通过组合HTTP方法, 请求地址和请求参数得到  `payload`.
-`payload`并不需要进行`key`排序。
+PS: `payload`并不需要进行`key`排序。
 
 ~~~Ruby
 # canonical_verb 是HTTP方法，例如GET 
