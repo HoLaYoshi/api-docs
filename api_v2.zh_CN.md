@@ -1,4 +1,4 @@
-## OCX 开发者接口 (API version 2) 
+## OCX 开发者接口 (API version 2)
 
 
 **接口URI前缀:` /api/v2`**
@@ -27,9 +27,9 @@ OCX开发者接口包含两类API
 
 ### 如何签名 (验证)
 
-在给一个Private API请求签名之前, 你必须准备好你的`access key/secret key`. 
+在给一个Private API请求签名之前, 你必须准备好你的`access key/secret key`.
 
-在注册并认证通过后之后，只需访问API密钥页面就可以得到您的密钥。 
+在注册并认证通过后之后，只需访问API密钥页面就可以得到您的密钥。
 
 所有的Private API都需要这3个用于身份验证的参数:
 
@@ -55,15 +55,15 @@ tonce = HTTParty.get('https://openapi.ocx.com/api/v2/timestamp')
 PS: `payload`并不需要进行`key`排序。
 
 ~~~Ruby
-# canonical_verb 是HTTP方法，例如GET 
-# canonical_uri 是请求地址， 例如/api/v2/markets 
-# canonical_query 是请求参数通过&连接而成的字符串，参数包括access_key和tonce, 参数必须按照字母序排列，例如access_key=xxx&foo=bar&tonce=123456789 
-# 最后再把这三个字符串通过'|'字符连接起来，看起来就像这样: 
+# canonical_verb 是HTTP方法，例如GET
+# canonical_uri 是请求地址， 例如/api/v2/markets
+# canonical_query 是请求参数通过&连接而成的字符串，参数包括access_key和tonce, 参数必须按照字母序排列，例如access_key=xxx&foo=bar&tonce=123456789
+# 最后再把这三个字符串通过'|'字符连接起来，看起来就像这样:
 
-# GET|/api/v2/markets|access_key=xxx&foo=bar&tonce=123456789 
+# GET|/api/v2/markets|access_key=xxx&foo=bar&tonce=123456789
 #
-def payload 
-  "#{canonical_verb}|#{canonical_uri}|#{canonical_query}" 
+def payload
+  "#{canonical_verb}|#{canonical_uri}|#{canonical_query}"
 end
 ~~~
 
@@ -72,17 +72,17 @@ end
 2. 对上述字符串使用`HMAC-SHA256`加密算法进行`hash`计算:
 
 ~~~
- hash = HMAC-SHA256(payload, secret_key).to_hex 
+ hash = HMAC-SHA256(payload, secret_key).to_hex
 ~~~
 
-   
+
 
 #### 签名范例
 
 假设我的secret key是"abc", 那么使用SHA256算法对上面例子中的payload计算HMAC的结果是(以hex表示)：
 
 ~~~ruby
-  hash = HMAC-SHA256('GET|/api/v2/markets|access_key=xxx&foo=bar&tonce=123456789', 'abc').to_hex = '704f773b6b26772fd82bd3a8115079fb4f71d7baa1aad6b2922e99b17ed95cdc' 
+  hash = HMAC-SHA256('GET|/api/v2/markets|access_key=xxx&foo=bar&tonce=123456789', 'abc').to_hex = '704f773b6b26772fd82bd3a8115079fb4f71d7baa1aad6b2922e99b17ed95cdc'
 ~~~
 
 
@@ -91,7 +91,7 @@ end
 
 ~~~ruby
 secret = 'abc'
-string_to_sign = 'GET|/api/v2/markets|access_key=xxx&foo=bar&tonce=123456789' 
+string_to_sign = 'GET|/api/v2/markets|access_key=xxx&foo=bar&tonce=123456789'
 signature = OpenSSL::HMAC.hexdigest('sha256', secret, string_to_sign)
 # => 704f773b6b26772fd82bd3a8115079fb4f71d7baa1aad6b2922e99b17ed95cdc
 ~~~
@@ -112,7 +112,7 @@ curl -X GET 'https://openapi.ocx.com/api/v2/markets?access_key=xxx&foo=bar&tonce
 
 #### API 请求范例
 
-以40000CNY的价格买入1BTC: 
+以40000CNY的价格买入1BTC:
 
 ```shell
 curl -X POST 'https://openapi.ocx.com/api/v2/orders' -d 'access_key=your_access_key&tonce=1234567&signature=computed_signature&market_code=btccny&price=40000&side=buy&volume=1'
@@ -122,10 +122,10 @@ curl -X POST 'https://openapi.ocx.com/api/v2/orders' -d 'access_key=your_access_
 
 #### API 返回结果
 
-如果API调用失败，返回的请求会使用对应的HTTP status code, 同时返回包含了详细错误信息的JSON数据, 比如: 
+如果API调用失败，返回的请求会使用对应的HTTP status code, 同时返回包含了详细错误信息的JSON数据, 比如:
 
 ~~~json
-{"error":{"code":1001,"message":"market does not have a valid value"}} 
+{"error":{"code":1001,"message":"market does not have a valid value"}}
 ~~~
 
 所有错误都遵循上面例子的格式，只是`code`和`message`不同。
@@ -222,8 +222,8 @@ GET https://openapi.ocx.com/api/v2/depth?market_code=ethbtc
 # Response
  {
      "data" : {
-         "timestamp" : 1529275554, 
-         "asks" : [], 
+         "timestamp" : 1529275554,
+         "asks" : [],
          "bids" : []
      }
  }
@@ -355,11 +355,13 @@ State 说明
 
 
 
-6. `POST /api/v2/orders `下单
+6. `POST /api/v2/orders/:market_code `下单
 
-* URL `https://openapi.ocx.com/api/v2/orders`
+* URL `https://openapi.ocx.com/api/v2/orders/:market_code`
 
-	请求参数	
+Warning: **URL 和 body 请求参数中均需要传入 market_code**
+
+	请求参数
 
 | 参数名      | 参数类型 | 是否必须 | 解释                       |
 | ----------- | -------- | -------- | -------------------------- |
@@ -372,7 +374,7 @@ State 说明
 
 ```json
 # Request
-POST https://openapi.ocx.com/api/v2/orders/
+POST https://openapi.ocx.com/api/v2/orders/:ethbtc
 # Response
 {
     "data": {
@@ -419,7 +421,7 @@ POST https://openapi.ocx.com/api/v2/orders/
 7. `POST /api/v2/orders/:id/cancel `撤单
 
 * URL `https://openapi.ocx.com/api/v2/orders/:id/cancel`
-	 请求参数	
+	 请求参数
 
 | 字段 | 类型    | 是否必须 | 解释        |
 | ---- | ------- | -------- | ----------- |
