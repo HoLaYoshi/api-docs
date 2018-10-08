@@ -113,32 +113,80 @@ OCX Websocket Streams 提供以下几种数据频道：
 	}
 ```
 
-## 私有频道授权
+* { channel: 'private-COINX2TXAEIWX', event: 'order|account|accounts' }, 其中 COINX2TXAEIWX 指用户标识符, 该标识符可以通过网站 账户中心 -> 我的邀请 -> 我的推荐ID 可以获得
 
-TO BE CONTINUED
+返回结果示例
 
-## 完整示例
+```js
+{
+	'channel': 'private-COINX2TXAEIWX',
+	'event': 'order',
+	'data': {
+		'id': 1234567,       // <Integer>, 委托单 id
+		'market': 'ocxeth',  // <string>,  交易对代号
+		'kind': 'ask',       // <string>,  委托单类型, ask=卖，bid=买
+		'price': '0.00001',  // <string>,  委托单价格
+		'state': 'wait',     // <string>,  委托状态, wait=未成交, cancel=取消, done=完成
+		'volume': '100',     // <string>,  目前未成交委托数量
+		'origin_volume': '100',  // <string>, 委托数量
+	}
+}
+```
 
-建立连接前先通过官方渠道获得
+```js
+{
+	'channel': 'private-COINX2TXAEIWX',
+	'event': 'account',
+	'data': {
+		'balance': '10000.1234', // <string>, 持仓余额
+		'locked':   '0.0',       // <string>, 持仓冻结
+		'currency': 'ocx'        // <string>, 持仓币种
+	}
+}
+```
+
+```js
+{
+	'channel': 'private-COINX2TXAEIWX',
+	'event': 'accounts',
+	'data': {
+		'type': 'update',
+		'id': 2,
+		'attributions': {
+			'balance': '100.0000',
+			'locked': '0.0',
+			'private_locked': '0.0',
+		}
+	}
+}
+```
+
+## 连接授权
+
+公有频道建立连接前先通过官方渠道获得
 
 * APP_KEY
 * APP_CLUSTER
-* APP_HOST
-* APP_PORT
+* WS_HOST
+* WSS_PORT
 
 如果需要连接私有频道需要通过 API 服务提供的 <AUTH_URL> 并传入 <AUTH_TOKEN> 进行授权连接
 
 * AUTH_URL
 * AUTH_TOKEN
 
+其中获取 AUTH_TOKEN, 请通过网站 -> 账户中心 -> 我的 API，点击查看按钮会展示 apiKey 和 secretKey, 其中 apiKey 即我们所需的 AUTH_TOKEN
+
+## 完整示例
+
 ```js
 const pusher = new Pusher(env.APP_KEY, {
 		cluster: env.APP_CLUSTER,
-		wsHost: env.APP_HOST,
-		wssPort: env.APP_PROT
+		wsHost: env.WS_HOST,
+		wssPort: env.WSS_PROT
 		encrypted: true,
 		forceTLS: true,
-		authEndpoint: requestUrl.pusher,
+		authEndpoint: AUTH_URL,
 		auth: {
 				headers: { Authorization: <AUTH_TOKEN> }
 		},
