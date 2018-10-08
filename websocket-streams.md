@@ -117,6 +117,8 @@ OCX Websocket Streams 提供以下几种数据频道：
 
 返回结果示例
 
+1. 委托单成交变化
+
 ```js
 {
 	'channel': 'private-COINX2TXAEIWX',
@@ -133,6 +135,8 @@ OCX Websocket Streams 提供以下几种数据频道：
 }
 ```
 
+2. 特定币种持仓账户变化
+
 ```js
 {
 	'channel': 'private-COINX2TXAEIWX',
@@ -141,22 +145,6 @@ OCX Websocket Streams 提供以下几种数据频道：
 		'balance': '10000.1234', // <string>, 持仓余额
 		'locked':   '0.0',       // <string>, 持仓冻结
 		'currency': 'ocx'        // <string>, 持仓币种
-	}
-}
-```
-
-```js
-{
-	'channel': 'private-COINX2TXAEIWX',
-	'event': 'accounts',
-	'data': {
-		'type': 'update',
-		'id': 2,
-		'attributions': {
-			'balance': '100.0000',
-			'locked': '0.0',
-			'private_locked': '0.0',
-		}
 	}
 }
 ```
